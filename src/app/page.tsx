@@ -5,16 +5,32 @@ import { ConnectButton, MediaRenderer, TransactionButton, useActiveAccount, useR
 import thirdwebIcon from "@public/thirdweb.svg";
 import { client } from "./client";
 import { defineChain, getContract, toEther } from "thirdweb";
-import { sepolia } from "thirdweb/chains";
 import { getContractMetadata } from "thirdweb/extensions/common";
 import { claimTo, getActiveClaimCondition, getTotalClaimedSupply, nextTokenIdToMint } from "thirdweb/extensions/erc721";
 import { useState } from "react";
+
+
 
 export default function Home() {
   const account = useActiveAccount();
 
   // Replace the chain with the chain you want to connect to
-  const chain = defineChain( sepolia );
+  const chain = defineChain({
+    id: 10143,
+    name: "Monad Testnet",
+    nativeCurrency: { name: "Monad Testnet", symbol: "DMON", decimals: 18 },
+    rpcUrls: {
+      default: {
+        http: ["https://testnet-rpc.monad.xyz"],
+      },
+    },
+    blockExplorers: {
+      default: {
+        name: "Monad testnet Blockscout",
+        url: "https://testnet.monadexplorer.com/",
+      },
+    },
+  });
 
   const [quantity, setQuantity] = useState(1);
 
@@ -22,22 +38,22 @@ export default function Home() {
   const contract = getContract({
     client: client,
     chain: chain,
-    address: "0xBb1d78c8799b33c5791ED6e49B84429c7106759E"
+    address: "0x8B96d8a3dB6148eb2c75E7F249637A2A76728f7E"
   });
 
-  const { data: contractMetadata, isLoading: isContractMetadataLaoding } = useReadContract( getContractMetadata,
+  const { data: contractMetadata, isLoading: isContractMetadataLaoding } = useReadContract(getContractMetadata,
     { contract: contract }
   );
 
-  const { data: claimedSupply, isLoading: isClaimedSupplyLoading } = useReadContract( getTotalClaimedSupply,
-    { contract: contract}
-  );
-
-  const { data: totalNFTSupply, isLoading: isTotalSupplyLoading } = useReadContract( nextTokenIdToMint,
+  const { data: claimedSupply, isLoading: isClaimedSupplyLoading } = useReadContract(getTotalClaimedSupply,
     { contract: contract }
   );
 
-  const { data: claimCondition } = useReadContract( getActiveClaimCondition,
+  const { data: totalNFTSupply, isLoading: isTotalSupplyLoading } = useReadContract(nextTokenIdToMint,
+    { contract: contract }
+  );
+
+  const { data: claimCondition } = useReadContract(getActiveClaimCondition,
     { contract: contract }
   );
 
@@ -45,10 +61,11 @@ export default function Home() {
     const total = quantity * parseInt(claimCondition?.pricePerToken.toString() || "0");
     return toEther(BigInt(total));
   }
+  console.log(contractMetadata?.image);
 
   return (
     <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
-	    <div className="py-20 text-center">
+      <div className="py-20 text-center">
         <Header />
         <ConnectButton
           client={client}
@@ -59,11 +76,9 @@ export default function Home() {
             <p>Loading...</p>
           ) : (
             <>
-              <MediaRenderer
-                client={client}
-                src={contractMetadata?.image}
-                className="rounded-xl"
-              />
+              <Image
+                src="/purple_cat.jpeg" alt={"purple cat"} width={500}
+                height={500} />
               <h2 className="text-2xl font-semibold mt-4">
                 {contractMetadata?.name}
               </h2>
@@ -84,8 +99,8 @@ export default function Home() {
               className="bg-black text-white px-4 py-2 rounded-md mr-4"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
             >-</button>
-            <input 
-              type="number" 
+            <input
+              type="number"
               value={quantity}
               onChange={(e) => setQuantity(parseInt(e.target.value))}
               className="w-10 text-center border border-gray-300 rounded-md bg-black text-white"
@@ -110,24 +125,17 @@ export default function Home() {
           </TransactionButton>
         </div>
       </div>
-    </main>
+    </main >
   );
 }
 
 function Header() {
   return (
     <header className="flex flex-row items-center">
-      <Image
-        src={thirdwebIcon}
-        alt=""
-        className="size-[150px] md:size-[150px]"
-        style={{
-          filter: "drop-shadow(0px 0px 24px #a726a9a8)",
-        }}
-      />
+
 
       <h1 className="text-2xl md:text-6xl font-semibold md:font-bold tracking-tighter mb-6 text-zinc-100">
-        NFT Claim App
+        Purple CAT NFT
       </h1>
     </header>
   );
