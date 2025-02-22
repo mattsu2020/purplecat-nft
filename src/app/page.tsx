@@ -64,7 +64,7 @@ export default function Home() {
   console.log(contractMetadata?.image);
 
   return (
-    <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-screen-lg mx-auto">
+    <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-(--breakpoint-lg) mx-auto">
       <div className="py-20 text-center">
         <Header />
         <ConnectButton
