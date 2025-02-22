@@ -8,17 +8,20 @@ import { defineChain, getContract, toEther } from "thirdweb";
 import { getContractMetadata } from "thirdweb/extensions/common";
 import { claimTo, getActiveClaimCondition, getTotalClaimedSupply, nextTokenIdToMint } from "thirdweb/extensions/erc721";
 import { useState } from "react";
-
+import { createWallet, inAppWallet } from "thirdweb/wallets";
 
 
 export default function Home() {
   const account = useActiveAccount();
-
+  const wallets = [
+    createWallet("io.metamask"),
+    createWallet("app.phantom"),
+  ];
   // Replace the chain with the chain you want to connect to
   const chain = defineChain({
     id: 10143,
     name: "Monad Testnet",
-    nativeCurrency: { name: "Monad Testnet", symbol: "DMON", decimals: 18 },
+    nativeCurrency: { name: "Monad Testnet", symbol: "MON", decimals: 18 },
     rpcUrls: {
       default: {
         http: ["https://testnet-rpc.monad.xyz"],
@@ -64,12 +67,13 @@ export default function Home() {
   console.log(contractMetadata?.image);
 
   return (
-    <main className="p-4 pb-10 min-h-[100vh] flex items-center justify-center container max-w-(--breakpoint-lg) mx-auto">
+    <main className="p-4 pb-10 min-h-[10vh] flex items-center justify-center container max-w-(--breakpoint-lg) mx-auto">
       <div className="py-20 text-center">
         <Header />
         <ConnectButton
           client={client}
           chain={chain}
+          wallets={wallets}
         />
         <div className="flex flex-col items-center mt-4">
           {isContractMetadataLaoding ? (
@@ -77,8 +81,8 @@ export default function Home() {
           ) : (
             <>
               <Image
-                src="/purple_cat.jpeg" alt={"purple cat"} width={500}
-                height={500} />
+                src="/purple_cat.jpeg" alt={"purple cat"} width={200}
+                height={200} />
               <h2 className="text-2xl font-semibold mt-4">
                 {contractMetadata?.name}
               </h2>
