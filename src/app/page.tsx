@@ -81,14 +81,11 @@ export default function Home() {
           ) : (
             <>
               <Image
-                src="/purple_cat.jpeg" alt={"purple cat"} width={200}
-                height={200} />
-              <h2 className="text-2xl font-semibold mt-4">
-                {contractMetadata?.name}
-              </h2>
-              <p className="text-lg mt-2">
-                {contractMetadata?.description}
-              </p>
+                src="/purple_cat.jpeg" alt={"purple cat"} width={300}
+                height={300}
+                priority
+              />
+
             </>
           )}
           {isClaimedSupplyLoading || isTotalSupplyLoading ? (
