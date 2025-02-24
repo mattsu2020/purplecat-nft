@@ -68,7 +68,7 @@ export default function Home() {
 
   return (
     <main className="p-4 pb-10 min-h-[10vh] flex items-center justify-center container max-w-(--breakpoint-lg) mx-auto">
-      <div className="py-20 text-center">
+      <div className="py-5 text-center">
         <Header />
         <ConnectButton
           client={client}
@@ -136,8 +136,6 @@ export default function Home() {
 function Header() {
   return (
     <header className="flex flex-row items-center">
-
-
       <h1 className="text-2xl md:text-6xl font-semibold md:font-bold tracking-tighter mb-6 text-zinc-100">
         Purple CAT NFT
       </h1>
